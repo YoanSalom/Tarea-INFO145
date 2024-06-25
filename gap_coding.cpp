@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
-#include <omp.h>
+//#include <omp.h>
 
 using namespace std;
 
@@ -29,7 +29,7 @@ int main(){
     int n;
     int search;
     int pos;
-    double t1, t2 , tfin;
+    //double t1, t2 , tfin;
     
     //genera arreglos
 
@@ -57,9 +57,9 @@ int main(){
 
     
     //Busqueda binaria para arreglo lineal
-    t1 = omp_get_wtime();
+    //t1 = omp_get_wtime();
     pos = binarysearch(num_array,0,n-1,search);
-    t2 = omp_get_wtime();
+    //t2 = omp_get_wtime();
 
     if (pos == -1){
         cout << search  << " no se encuentra en el arreglo lineal" << endl;
@@ -68,9 +68,9 @@ int main(){
         cout << search << " esta en el arreglo lineal, en la posicion: " << pos << endl;
     }
 
-    tfin = t2 - t1;
+    //tfin = t2 - t1;
 
-    cout << "Se demoro: " << tfin<< " s" << endl;
+    //cout << "Se demoro: " << tfin<< " s" << endl;
 
     return 0;
 }
