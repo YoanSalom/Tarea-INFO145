@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
+#include "huffman.h"
 
 using namespace std;
+
 
 int* generarArregloGap(int n, int* A){
     int* Gap = new int[n];
@@ -40,7 +42,7 @@ int* arregloLinealGen(int n, int e){
 }
 
 int main(){
-    int n = 10, e = 2, m = 4, b = 2;
+    int n = 10, e = 3, m = 10, b = 8;
     int* arregloLineal = arregloLinealGen(n, e);
     int* arregloGap = generarArregloGap(n, arregloLineal);
     int* arregloSample = generarArregloSample(n, arregloLineal, m, b);
@@ -54,6 +56,11 @@ int main(){
     cout << "Arreglo Sample: ";
     printArray(arregloSample, m);
     
+    huffman huff(arregloGap, n);
+    cout << "Arbol de Huffman:"<< "\n";
+    huff.print(huff.root);
+    
+
     delete[] arregloSample;
     delete[] arregloGap;
     delete[] arregloLineal;
