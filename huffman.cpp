@@ -72,7 +72,6 @@ void huffman::generateCode(int* Arr) {
     for (int i = l / 2 - 1; i >= 0; i--) {
         minHeapify(Prob, l, i);
     }
-    
     // Imprimir el heap para verificar
     cout << "Min-Heap creado: ";
     for (const auto& elem : Prob) {

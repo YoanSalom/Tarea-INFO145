@@ -42,7 +42,7 @@ int* arregloLinealGen(int n, int e){
 }
 
 int main(){
-    int n = 10, e = 3, m = 10, b = 8;
+    int n = 1000, e = 20, m = 25, b = 50;
     int* arregloLineal = arregloLinealGen(n, e);
     int* arregloGap = generarArregloGap(n, arregloLineal);
     int* arregloSample = generarArregloSample(n, arregloLineal, m, b);
