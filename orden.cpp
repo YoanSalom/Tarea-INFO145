@@ -9,7 +9,7 @@
 using namespace std;
 
 //Cambié la función para trabajar con punteros
-int binarysearch(int* A, int l, int r, int num){
+int binarySearch(int* A, int l, int r, int num){
     int m;
     while (l <= r){
         m = l + (r - l) / 2;
@@ -89,22 +89,86 @@ int* arregloNormalGen(int n, int media, int ds){
 
     return A;
 }
-
-void imprimeTiempo(int *A, int l, int r, int elem, string type){
+//Función que imprime el tiempo de búsqueda del elemento del arreglo
+void imprimeTiempoBusqueda(int *A, int l, int r, int elem, string type){
     double t0L = clock();
-    int posL= binarysearch(A, l, r, elem);
+    int posL= binarySearch(A, l, r, elem);
     double t1L = clock();
     double tL = (t1L-t0L)/CLOCKS_PER_SEC;
 
+    cout<<endl;
     if (posL == -1){
-        cout << elem  << " no se encuentra en el " <<type<< endl;
+        cout <<"El elemento: "<< elem  << " no se encuentra en el " <<type<< endl;
     }
     else{
-        cout << elem << " está en el arreglo lineal, en la posición: " << posL << endl;
+        cout <<"El elemento: "<< elem << " está en el "<<type<<", en la posición: " << posL << endl;
     }
     // Esto lo modifique un poco para que el resultado no se exprese con notación científica
     cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
-    
+}
+
+//Se implementa el binary search para el sample con el gap
+int binarySearchGapWithSample(int* gap, int* sample, int n, int m, int elem, int b) {
+    //Primero, verificamos que esté en el sample
+    int sample_index = binarySearch(sample, 0, m - 1, elem);
+    if (sample_index != -1) {
+        return sample_index * b;
+    }
+
+    //Encontramos el rango correcto en el sample
+    int l = 0, r = m - 1, mid;
+    while (l <= r) {
+        mid = l + (r - l) / 2;
+        if (sample[mid] < elem) {
+            l = mid + 1;
+        } else {
+            r = mid - 1;
+        }
+    }
+
+    //Buscamos en el rango del gap array
+    int start = r * b;
+    int end;
+    if (l < m) {
+        end = l * b;
+    } else {
+        end = n - 1;
+    }
+    int current_value = gap[0];
+
+    for (int i = 1; i <= start; ++i) {
+        current_value += gap[i];
+    }
+
+    for (int i = start + 1; i <= end; ++i) {
+        current_value += gap[i];
+        if (current_value == elem) {
+            return i;
+        }
+        if (current_value > elem) {
+            break;
+        }
+    }
+
+    return -1; // No se encontró el elemento
+}
+
+imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, int b, string type){
+    double t0L = clock();
+    int posL= binarySearchGapWithSample(gap, sample, n, m, elem, b);
+    double t1L = clock();
+    double tL = (t1L-t0L)/CLOCKS_PER_SEC;
+
+    cout<<endl;
+    if (posL == -1){
+        cout <<"El elemento: "<< elem  << " no se encuentra en el " <<type<< endl;
+    }
+    else{
+        cout <<"El elemento: "<< elem << " está en el "<<type<<", en la posición: " << posL << endl;
+    }
+    // Esto lo modifique un poco para que el resultado no se exprese con notación científica
+    cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
+
 }
 
 int main(){
@@ -112,7 +176,7 @@ int main(){
 
     // Se definieron variables más grandes (hay que cambiarlas para ingresarlas como usuario)
     int media = 5000, ds = 1000;
-    int n = 1000000, e = 3, m = 100, b = n/m;//También modifiqué el b, que se supone que debe ser n/m.
+    int n = 1000000, e = 5, m = 100, b = n/m;//También modifiqué el b, que se supone que debe ser n/m.
 
     //Creación de los arreglos lineal y normal, implementando la búsqueda binaria y el sample y gap coded.
     //Solo falta el Binary Search de los arreglos con los gap y sample.
@@ -131,7 +195,7 @@ int main(){
     printArray(arregloLineal, n);
 
     //BINARY SEARCH PARA ARREGLO LINEAL
-    imprimeTiempo(arregloLineal, 0, n-1, buscar_lineal, "Arreglo Lineal");
+    imprimeTiempoBusqueda(arregloLineal, 0, n-1, buscar_lineal, "Arreglo Lineal");
 
     cout << "Arreglo Lineal Gap-Coded: ";
     printArray(arregloGapLineal, n);
@@ -139,19 +203,24 @@ int main(){
     cout << "Arreglo Lineal Sample: ";
     printArray(arregloSampleLineal, m);
 
+    imprimeTiempoBusquedaSample(arregloGapLineal,arregloSampleLineal, n, m, buscar_lineal, b, "Arreglo Lineal")
+
     cout << endl;
 
     cout << "Arreglo Normal: ";
     printArray(arregloNormal, n);
 
     //BINARY SEARCH PARA ARREGLO NORMAL
-    imprimeTiempo(arregloNormal, 0, n-1, buscar_normal, "Arreglo Normal");
+    imprimeTiempoBusqueda(arregloNormal, 0, n-1, buscar_normal, "Arreglo Normal");
 
     cout << "Arreglo Normal Gap-Coded: ";
     printArray(arregloGapNormal, n);
     
     cout << "Arreglo Normal Sample: ";
     printArray(arregloSampleNormal, m);
+
+    imprimeTiempoBusquedaSample(arregloGapNormal,arregloSampleNormal, n, m, buscar_normal, b, "Arreglo Normal")
+
 
     cout<<endl;
     huffman huff(arregloGapLineal, n);
