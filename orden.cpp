@@ -89,7 +89,8 @@ int* arregloNormalGen(int n, int media, int ds){
 
     return A;
 }
-//Función que imprime el tiempo de búsqueda del elemento del arreglo
+//Esta función imprime el tiempo de búsqueda, llamando a la funcion que busca, es pura estética, para que esté
+//más ordenado y no hayan tantas cosas en el main
 void imprimeTiempoBusqueda(int *A, int l, int r, int elem, string type){
     double t0L = clock();
     int posL= binarySearch(A, l, r, elem);
@@ -153,7 +154,9 @@ int binarySearchGapWithSample(int* gap, int* sample, int n, int m, int elem, int
     return -1; // No se encontró el elemento
 }
 
-imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, int b, string type){
+//Esta función imprime el tiempo de búsqueda, llamando a la funcion que busca, es pura estética, para que esté
+//más ordenado y no hayan tantas cosas en el main
+void imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, int b, string type){
     double t0L = clock();
     int posL= binarySearchGapWithSample(gap, sample, n, m, elem, b);
     double t1L = clock();
@@ -161,10 +164,10 @@ imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, int b
 
     cout<<endl;
     if (posL == -1){
-        cout <<"El elemento: "<< elem  << " no se encuentra en el " <<type<< endl;
+        cout <<"El elemento: "<< elem  << " no se encuentra con las estructuras Sample y Gap" <<type<< endl;
     }
     else{
-        cout <<"El elemento: "<< elem << " está en el "<<type<<", en la posición: " << posL << endl;
+        cout <<"El elemento: "<< elem << " se encuentra con las estructuras Sample y Gap "<<type<<", en la posición: " << posL << endl;
     }
     // Esto lo modifique un poco para que el resultado no se exprese con notación científica
     cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
@@ -203,7 +206,7 @@ int main(){
     cout << "Arreglo Lineal Sample: ";
     printArray(arregloSampleLineal, m);
 
-    imprimeTiempoBusquedaSample(arregloGapLineal,arregloSampleLineal, n, m, buscar_lineal, b, "Arreglo Lineal")
+    imprimeTiempoBusquedaSample(arregloGapLineal,arregloSampleLineal, n, m, buscar_lineal, b, "Arreglo Lineal");
 
     cout << endl;
 
@@ -219,8 +222,7 @@ int main(){
     cout << "Arreglo Normal Sample: ";
     printArray(arregloSampleNormal, m);
 
-    imprimeTiempoBusquedaSample(arregloGapNormal,arregloSampleNormal, n, m, buscar_normal, b, "Arreglo Normal")
-
+    imprimeTiempoBusquedaSample(arregloGapNormal,arregloSampleNormal, n, m, buscar_normal, b, "Arreglo Normal");
 
     cout<<endl;
     huffman huff(arregloGapLineal, n);
