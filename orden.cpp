@@ -90,6 +90,23 @@ int* arregloNormalGen(int n, int media, int ds){
     return A;
 }
 
+void imprimeTiempo(int *A, int l, int r, int elem, string type){
+    double t0L = clock();
+    int posL= binarysearch(A, l, r, elem);
+    double t1L = clock();
+    double tL = (t1L-t0L)/CLOCKS_PER_SEC;
+
+    if (posL == -1){
+        cout << elem  << " no se encuentra en el " <<type<< endl;
+    }
+    else{
+        cout << elem << " está en el arreglo lineal, en la posición: " << posL << endl;
+    }
+    // Esto lo modifique un poco para que el resultado no se exprese con notación científica
+    cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
+    
+}
+
 int main(){
     srand(time(NULL));
 
@@ -114,21 +131,8 @@ int main(){
     printArray(arregloLineal, n);
 
     //BINARY SEARCH PARA ARREGLO LINEAL
+    imprimeTiempo(arregloLineal, 0, n-1, buscar_lineal, "Arreglo Lineal");
 
-    double t0L = clock();
-    int posL= binarysearch(arregloLineal, 0, n-1, buscar_lineal);
-    double t1L = clock();
-    double tL = (t1L-t0L)/CLOCKS_PER_SEC;
-
-    if (posL == -1){
-        cout << buscar_lineal  << " no se encuentra en el arreglo lineal" << endl;
-    }
-    else{
-        cout << buscar_lineal << " está en el arreglo lineal, en la posición: " << posL << endl;
-    }
-    // Esto lo modifique un poco para que el resultado no se exprese con notación científica
-    cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
-    
     cout << "Arreglo Lineal Gap-Coded: ";
     printArray(arregloGapLineal, n);
     
@@ -141,18 +145,7 @@ int main(){
     printArray(arregloNormal, n);
 
     //BINARY SEARCH PARA ARREGLO NORMAL
-    double t0N = clock();
-    int posN = binarysearch(arregloNormal, 0, n-1, buscar_normal);
-    double t1N = clock();
-    double tN = (t1N-t0N)/CLOCKS_PER_SEC;
-
-    if (posN == -1){
-        cout << buscar_normal  << " no se encuentra en el arreglo normal" << endl;
-    }
-    else{
-        cout << buscar_normal << " está en el arreglo normal, en la posición: " << posN << endl;
-    }
-    cout << fixed << setprecision(6) << "Se demoró " << tN << " segundos en hacer la búsqueda" << endl<<endl;
+    imprimeTiempo(arregloNormal, 0, n-1, buscar_normal, "Arreglo Normal");
 
     cout << "Arreglo Normal Gap-Coded: ";
     printArray(arregloGapNormal, n);
