@@ -1,4 +1,6 @@
 #include "huffman.h"
+#include <bitset>
+
 
 
 huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
@@ -56,8 +58,24 @@ void huffman::generateHuffmanCodes(node* root, const string& code){
 }
 
 void huffman::printHuffmanCodes(){
+    string aux;
     for (const auto& code : huffmanCodes) {
         cout << "Value: " << code.first << ", Code: " << code.second << endl;
+        /*if(size(code.second) < 8){ //Agrega los ceros necesarios para poder transformalos a un valor ASCII
+            aux = code.second;
+            for (int i = 0; i< 8 - size(code.second); i++){
+                aux = "0" + aux;
+            }
+            bitset<8> temp(aux);//Toma el string y lo guarda como bitset
+            cout << "ASCII Code: " << aux << ", ASCII char: " << temp.to_ulong() << endl; //.to_ulong() no hace lo que queria :( 
+        }
+        else if (size(code.second) == 8){
+            bitset<8> temp(code.second);
+            cout << "ASCII Code: " << code.second << ", ASCII char: " << temp.to_ulong() << endl;
+        }
+        else{
+            cout << "No se puede representar como ASCII" << endl;
+        }*/
     }
 }
 
