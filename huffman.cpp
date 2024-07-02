@@ -9,16 +9,13 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
             maximo = Arr[i];
         }
     }
-
     // Crear un arreglo auxiliar para contar frecuencias
     int tamanoAuxiliar = maximo + 1;
     vector<int> frecuencias(tamanoAuxiliar, 0);
-
     // Contar la frecuencia de cada número en el arreglo
     for (int i = 0; i < n; ++i) {
         frecuencias[Arr[i]]++;
     }
-
     // Crear un vector de tuplas a partir del arreglo de frecuencias
     for (int num = 0; num < tamanoAuxiliar; ++num) {
         if (frecuencias[num] > 0) {
@@ -27,8 +24,12 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
         }
     }
     generateCode(Arr);
-    generateHuffmanCodes(root, "");
-    cout << "Codigos de Huffman:"<< "\n";
+    unsigned short int code = 0;
+    generateHuffmanCodes(root, 0, 0);
+    cout << "Codigos de Huffman:"<< "\n"; 
+    printHuffmanCodes();
+    insertionSort(huffmanCodes);
+    cout << "Codigos de Huffman despues de ordenarse:"<< "\n";
     printHuffmanCodes();
 }
 
@@ -45,20 +46,32 @@ void huffman::liberarNodos(node* n) {
     delete n;
 }
 
-void huffman::generateHuffmanCodes(node* root, const string& code){
-    if (!root) return;
-    // Si es una hoja, almacenar el código
-    if (root->value != -1) {
-        huffmanCodes.push_back({root->value, code});
+void huffman::generateHuffmanCodes(node* root, unsigned short int code,unsigned short int length){
+        if (!root) return;
+
+        // Si es una hoja, almacenar el código
+        if (root->value != -1) {
+            // Almacenar la longitud en los 8 bits más significativos
+            unsigned short int storedCode = (length << 8) | code;
+            huffmanCodes.push_back({root->value, storedCode});
+            std::cout << "Almacenando valor: " << root->value << ", codigo: " << bitset<16>(storedCode) << "\n";
+        }
+
+        // Desplazar el código y aumentar la longitud
+        generateHuffmanCodes(root->left, code << 1, length + 1);
+        generateHuffmanCodes(root->right, (code << 1) | 1, length + 1);
     }
-    generateHuffmanCodes(root->left, code + "0");
-    generateHuffmanCodes(root->right, code + "1");
-}
 
 void huffman::printHuffmanCodes(){
-    for (const auto& code : huffmanCodes) {
-        cout << "Value: " << code.first << ", Code: " << code.second << endl;
+        unsigned short int length, numero;
+        for (const auto& code : huffmanCodes) {
+        int value = code.first;
+        unsigned short int binCode = code.second;
+        extractCodeAndLength(binCode, length, numero);
+        // Imprimir el valor y el código en formato binario
+        cout << "Value: " << value << ", Code: " << numero <<" "<< "longitud: " << length <<" - ";
     }
+    cout << "\n";
 }
 
 void huffman::huffmanDecode() {
@@ -88,7 +101,7 @@ void huffman::generateCode(int* Arr) {
         // Extraer el segundo mínimo
         auto min2 = Prob[0];
         extractMinHeap(Prob, l);
-        cout << "Min-Heap al extraer: ";
+        cout << "Min-Heap al extraer los dos primeros elementos: ";
         // Añadir un nodo utilizando los dos elementos extraídos
         for (const auto& elem : Prob) {
             cout << get<0>(elem) << "(" << get<1>(elem) << ")";
@@ -158,8 +171,6 @@ void huffman::anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> 
     } else {
         rightNode = new node(get<0>(v), get<1>(v));
     }
-    
-
     // Crear un nuevo nodo que será el padre de u y v
     double combinedProbability = get<1>(u) + get<1>(v);
     node* parentNode = new node(-1, combinedProbability, leftNode, rightNode); // -1 indica que no es una hoja
@@ -189,4 +200,29 @@ void huffman::print(node* root) {
 
     // Recorrer el subárbol derecho
     print(root->right);
+}
+
+void huffman::extractCodeAndLength(unsigned short int storedCode, unsigned short int& length, unsigned short int& code) {
+    length = (storedCode >> 8) & 0xFF; // Extraer los 8 bits más significativos
+    code = storedCode & 0xFF;          // Extraer los 8 bits menos significativos
+}
+
+int huffman::getLength(unsigned short int code){
+    return code >> 8;
+}
+void huffman::insertionSort(vector<pair<int, unsigned short int>>& huffmanCodes) {
+    int n = huffmanCodes.size();
+    for (int i = 1; i < n; ++i) {
+        auto key = huffmanCodes[i];
+        int keyLength = getLength(key.second);
+        int j = i - 1;
+
+        // Mover los elementos de huffmanCodes[0..i-1], que son mayores que el
+        // largo del código clave, una posición adelante de su posición actual
+        while (j >= 0 && getLength(huffmanCodes[j].second) > keyLength) {
+            huffmanCodes[j + 1] = huffmanCodes[j];
+            --j;
+        }
+        huffmanCodes[j + 1] = key;
+    }
 }
