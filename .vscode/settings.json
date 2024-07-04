@@ -10,6 +10,7 @@
         "functional": "cpp",
         "utility": "cpp",
         "ostream": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "algorithm": "cpp"
     }
 }

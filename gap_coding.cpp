@@ -59,11 +59,15 @@ int main(){
     huffman huff(arregloGap, n);
     cout << "Arbol de Huffman:"<< "\n";
     huff.print(huff.rootC);
-
+    unsigned short int* codesArr = new unsigned short int[(huff.huffmanCodes).size()];
+    for (int i = 0; i < (huff.huffmanCodes).size(); i++)
+    {
+        codesArr[i] = get<1>(huff.huffmanCodes[i]);
+    }
     huff.~huffman();
     delete[] arregloSample;
     delete[] arregloGap;
     delete[] arregloLineal;
-    unsigned short int a = 0;
+    delete[] codesArr;
     return 0;
 }
