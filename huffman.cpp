@@ -305,3 +305,27 @@ void huffman::generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& h
         }
     }
 }
+
+int huffman::searchT(node* root, unsigned short int code, int bit){
+    if (root = nullptr){
+        return;
+    }
+    if (0 == bit) {
+        unsigned short int mask = 1 << bit; 
+        bool bitValue = (code & mask) != 0;
+        if (bitValue) {
+            return root -> value;
+        } else {
+            return root -> value;
+        }
+    } 
+    else{                                                                               
+        unsigned short int mask = 1 << bit; 
+        bool bitValue = (code & mask) != 0;
+        if (bitValue) {
+            searchT(root -> right, code, bit - 1);
+        } else {
+            searchT(root -> left, code, bit - 1);
+        }
+    }
+}

@@ -32,6 +32,7 @@ class huffman{
         void print(node* n);
         void printHuffmanCodes();
         void generateHuffmanCodes(node* root, unsigned short int code = 0, unsigned short int length = 0);
+        int searchT(node* root, unsigned short int code, int bit);
         vector<tuple<int, unsigned short int>> huffmanCodes;
 
     private:
