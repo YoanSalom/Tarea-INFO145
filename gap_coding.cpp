@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cstdlib>
-#include <bitset>
 #include "huffman.h"
 
 using namespace std;
@@ -59,7 +58,7 @@ int main(){
     
     huffman huff(arregloGap, n);
     cout << "Arbol de Huffman:"<< "\n";
-    huff.print(huff.root);
+    huff.print(huff.rootC);
 
     huff.~huffman();
     delete[] arregloSample;

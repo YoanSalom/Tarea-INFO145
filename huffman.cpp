@@ -31,12 +31,18 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
     insertionSort(huffmanCodes);
     cout << "Codigos de Huffman despues de ordenarse:"<< "\n";
     printHuffmanCodes();
+    generateCanonicalHuffman(huffmanCodes);
+    huffmanCodes.clear();
+    cout << "Codigos de Huffman:"<< "\n";
+    generateHuffmanCodes(rootC, 0, 0);
+
 }
 
 
 huffman::~huffman() {
     // Liberar la memoria del árbol de Huffman
     liberarNodos(root);
+    liberarNodos(rootC);
 }
 
 void huffman::liberarNodos(node* n) {
@@ -48,15 +54,19 @@ void huffman::liberarNodos(node* n) {
 
 void huffman::generateHuffmanCodes(node* root, unsigned short int code,unsigned short int length){
         if (!root) return;
-
         // Si es una hoja, almacenar el código
         if (root->value != -1) {
-            // Almacenar la longitud en los 8 bits más significativos
-            unsigned short int storedCode = (length << 8) | code;
-            huffmanCodes.push_back({root->value, storedCode});
-            std::cout << "Almacenando valor: " << root->value << ", codigo: " << bitset<16>(storedCode) << "\n";
-        }
-
+            // Verificar que la longitud no supere 12 bits
+            if (length <= 12) {
+                // Almacenar la longitud en los 4 bits más significativos
+                unsigned short int storedCode = (length << 12) | code;
+                huffmanCodes.push_back({root->value, storedCode, root -> p});
+                cout << "Almacenando valor: " << root->value << ", codigo: " << bitset<16>(storedCode) << "\n";
+            } else {
+                cerr << "Error: la longitud del código supera los 12 bits para el valor " << root->value << "\n";
+                throw HuffmanCodeLengthException(); // Lanzar excepción
+            }
+    }
         // Desplazar el código y aumentar la longitud
         generateHuffmanCodes(root->left, code << 1, length + 1);
         generateHuffmanCodes(root->right, (code << 1) | 1, length + 1);
@@ -64,9 +74,9 @@ void huffman::generateHuffmanCodes(node* root, unsigned short int code,unsigned 
 
 void huffman::printHuffmanCodes(){
         unsigned short int length, numero;
-        for (const auto& code : huffmanCodes) {
-        int value = code.first;
-        unsigned short int binCode = code.second;
+        for (const auto& code : huffmanCodes){
+        int value = get<0>(code);
+        unsigned short int binCode = get<1>(code);
         extractCodeAndLength(binCode, length, numero);
         // Imprimir el valor y el código en formato binario
         cout << "Value: " << value << ", Code: " << numero <<" "<< "longitud: " << length <<" - ";
@@ -158,14 +168,12 @@ void huffman::extractMinHeap(vector<tuple<int, double, node*>>& heap, int& l) {
 void huffman::anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> v,int& len) {
     node* leftNode;
     node* rightNode;
-
     // Crear nuevos nodos para u y v si no son nodos internos (-1)
     if (get<0>(u) == -1) {
         leftNode = get<2>(u);
     } else {
         leftNode = new node(get<0>(u), get<1>(u));
     }
-
     if (get<0>(v) == -1) {
         rightNode = get<2>(v);
     } else {
@@ -174,21 +182,19 @@ void huffman::anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> 
     // Crear un nuevo nodo que será el padre de u y v
     double combinedProbability = get<1>(u) + get<1>(v);
     node* parentNode = new node(-1, combinedProbability, leftNode, rightNode); // -1 indica que no es una hoja
-    
     // Insertar el nuevo nodo en el vector Prob
     Prob.push_back(make_tuple(-1, combinedProbability, parentNode));
     len++;
     swap(Prob[len-1], Prob[Prob.size()-1]);
     // Actualizar la raíz del árbol de Huffman
     root = parentNode;
-
     cout <<  "valor:" <<root -> value << " probabilidad:" << root -> p << "\n";
     // Reordenar el minHeap
     for (int i = len / 2 - 1; i >= 0; i--) {
         minHeapify(Prob, len, i);
     }
-
 }
+
 void huffman::print(node* root) {
     if (root == nullptr)
         return;
@@ -203,26 +209,99 @@ void huffman::print(node* root) {
 }
 
 void huffman::extractCodeAndLength(unsigned short int storedCode, unsigned short int& length, unsigned short int& code) {
-    length = (storedCode >> 8) & 0xFF; // Extraer los 8 bits más significativos
-    code = storedCode & 0xFF;          // Extraer los 8 bits menos significativos
+    length = (storedCode >> 12) & 0xF; // Extraer los 4 bits más significativos
+    code = storedCode & 0xFFF;         // Extraer los 12 bits menos significativos
 }
 
 int huffman::getLength(unsigned short int code){
-    return code >> 8;
+    return code >> 12; //Retorna solo la longitud del codigo
 }
-void huffman::insertionSort(vector<pair<int, unsigned short int>>& huffmanCodes) {
+
+void huffman::insertionSort(vector<tuple<int, unsigned short int, double>>& huffmanCodes) {
     int n = huffmanCodes.size();
     for (int i = 1; i < n; ++i) {
         auto key = huffmanCodes[i];
-        int keyLength = getLength(key.second);
+        int keyLength = getLength(get<1>(key));
         int j = i - 1;
 
         // Mover los elementos de huffmanCodes[0..i-1], que son mayores que el
         // largo del código clave, una posición adelante de su posición actual
-        while (j >= 0 && getLength(huffmanCodes[j].second) > keyLength) {
+        while (j >= 0 && getLength(get<1>(huffmanCodes[j])) > keyLength) {
             huffmanCodes[j + 1] = huffmanCodes[j];
             --j;
         }
         huffmanCodes[j + 1] = key;
+    }
+}
+
+void huffman::arbolCan(int v, double v_p, unsigned short int l, int bit, node* rootT, unsigned short int code){
+    //añade los nodos para el codigo, si los bits faltantes llegan a 0 se crea el ultimo nodo
+   if (0 == bit) {
+        unsigned short int mask = 1 << bit; 
+        bool bitValue = (code & mask) != 0;
+        node* q = new node(v, v_p);
+        if (bitValue) {
+            rootT->right = q;
+        } else {
+            rootT->left = q;
+        }
+    } 
+    //en caso de que falten nodos se crean los nodos faltantes(para el primer codigo de 0 de largo l), recorre el arbol hasta encontrar donde inserta el nodo
+    else {
+        unsigned short int mask = 1 << bit; 
+        bool bitValue = (code & mask) != 0;
+        if (bitValue) {
+            if (rootT->right == nullptr) {
+                rootT->right = new node(-1, 0);
+            }
+            arbolCan(v, v_p, l, bit - 1, rootT->right, code);
+        } else {
+            if (rootT->left == nullptr) {
+                rootT->left = new node(-1, 0);
+            }
+            arbolCan(v, v_p, l, bit - 1, rootT->left, code);
+        }
+    }
+}
+
+void huffman::generateCanonicalHuffman(vector<tuple<int, unsigned short int, double>>& huffmanCodes){
+    //funcion para crear los codigos canonicos e insertarlos en el arbol.
+    unsigned short int l, l_c, code_c;
+    l = getLength(get<1>(huffmanCodes[0]));
+    rootC = new node(-1, 1);
+    code_c = 0;
+    arbolCan(get<0>(huffmanCodes[0]), get<2>(huffmanCodes[0]), l, l-1, rootC, code_c);
+    for(int i = 1; i < huffmanCodes.size(); i++){
+        l_c = getLength(get<1>(huffmanCodes[i]));
+        if(l == l_c){
+            if(code_c + 1 > 4095){
+                cerr << "Error: la longitud del código supera los 12 bits para el valor " << root->value << "\n";
+                throw HuffmanCodeLengthException(); // Lanzar excepción
+            }
+            code_c = code_c + 1;
+            arbolCan(get<0>(huffmanCodes[i]), get<2>(huffmanCodes[i]), l, l-1, rootC, code_c);
+        }
+        else if (l + 1 == l_c)
+        {
+            code_c = 2*(code_c + 1);
+            l++;
+            if(code_c> 4095){
+                cerr << "Error: la longitud del código supera los 12 bits para el valor " << root->value << "\n";
+                throw HuffmanCodeLengthException(); // Lanzar excepción
+            }
+            arbolCan(get<0>(huffmanCodes[i]), get<2>(huffmanCodes[i]), l, l-1, rootC, code_c);
+            }
+        else if (l + 1 < l_c)
+        {
+            while (l + 1< l_c){
+                if (l > 12){
+                    cerr << "Error: la longitud del código supera los 12 bits para el valor " << get<0>(huffmanCodes[i]) << "\n";
+                    throw HuffmanCodeLengthException(); // Lanzar excepción
+                }
+                l++;
+                code_c = code_c << 1;
+                arbolCan(-1, 0, l, l-1, rootC, code_c);
+        }
+        }
     }
 }

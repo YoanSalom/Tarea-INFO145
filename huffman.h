@@ -15,6 +15,13 @@ struct node
         : value(val), p(prob), left(l), right(r) {}
 };
 
+class HuffmanCodeLengthException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "La longitud del código supera los 12 bits";
+    }
+};
+
 class huffman{
     public:
         huffman(int* Arr, int n);
@@ -29,14 +36,15 @@ class huffman{
 
     private:
         vector<tuple<int, double, node*>> Prob;
-        vector<pair<int, unsigned short int>> huffmanCodes;
+        vector<tuple<int, unsigned short int, double>> huffmanCodes;
         void minHeapify(vector<tuple<int, double, node*>>& heap, int l, int i);
         void extractMinHeap(vector<tuple<int, double, node*>>& heap, int& l);
         void anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> v, int& len);
         void liberarNodos(node* n);
-        void arbolCan();
+        void arbolCan(int v, double v_p, unsigned short int l, int bit, node* rootT, unsigned short int code);
         void extractCodeAndLength(unsigned short int storedCode, unsigned short int& length, unsigned short int& code);
         int getLength(unsigned short int code);
-        void insertionSort(vector<pair<int, unsigned short int>>& huffmanCodes);
+        void insertionSort(vector<tuple<int, unsigned short int, double>>& huffmanCodes);
+        void generateCanonicalHuffman(vector<tuple<int, unsigned short int, double>>& huffmanCodes);
         };
 

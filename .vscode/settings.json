@@ -1,6 +1,15 @@
 {
     "files.associations": {
         "tuple": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "new": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "utility": "cpp",
+        "ostream": "cpp",
+        "bitset": "cpp"
     }
 }
