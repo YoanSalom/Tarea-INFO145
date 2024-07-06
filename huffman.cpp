@@ -2,27 +2,35 @@
 
 
 huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
-    // Encontrar el máximo valor en el arreglo para determinar el tamaño del arreglo auxiliar
+    // encontrar el máximo valor en el arreglo para determinar el tamaño del arreglo auxiliar
     int maximo = 0;
     for (int i = 0; i < n; ++i) {
         if (Arr[i] > maximo) {
             maximo = Arr[i];
         }
     }
-    // Crear un arreglo auxiliar para contar frecuencias
+    // crear un arreglo auxiliar para contar frecuencias
     int tamanoAuxiliar = maximo + 1;
     vector<int> frecuencias(tamanoAuxiliar, 0);
-    // Contar la frecuencia de cada número en el arreglo
+    // contar la frecuencia de cada número en el arreglo
     for (int i = 0; i < n; ++i) {
         frecuencias[Arr[i]]++;
     }
-    // Crear un vector de tuplas a partir del arreglo de frecuencias
+    cout << "frecuencias:";
+    for (int i = 0; i < tamanoAuxiliar; ++i) {
+        cout << i <<" : " << frecuencias[i] << "\n";
+    }
+
+    // crear un vector de tuplas a partir del arreglo de frecuencias
     for (int num = 0; num < tamanoAuxiliar; ++num) {
         if (frecuencias[num] > 0) {
             double probabilidad = static_cast<double>(frecuencias[num]) / n;
             Prob.push_back(make_tuple(num, probabilidad, nullptr));
         }
     }
+
+
+
     generateCode(Arr);
     unsigned short int code = 0;
     generateHuffmanCodes(root, 0, 0);
@@ -35,7 +43,8 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
     huffmanCodes.clear();
     cout << "Codigos de Huffman:"<< "\n";
     generateHuffmanCodes(rootC, 0, 0);
-
+    insertionSort(huffmanCodes);
+    fillArrays(c, f, huffmanCodes);
 }
 
 
@@ -82,10 +91,6 @@ void huffman::printHuffmanCodes(){
         cout << "Value: " << value << ", Code: " << numero <<" "<< "longitud: " << length <<" - ";
     }
     cout << "\n";
-}
-
-void huffman::huffmanDecode() {
-    // Implementar la decodificación de Huffman
 }
 
 void huffman::generateCode(int* Arr) {
@@ -306,26 +311,24 @@ void huffman::generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& h
     }
 }
 
-int huffman::searchT(node* root, unsigned short int code, int bit){
-    if (root = nullptr){
-        return;
-    }
-    if (0 == bit) {
-        unsigned short int mask = 1 << bit; 
-        bool bitValue = (code & mask) != 0;
-        if (bitValue) {
-            return root -> value;
-        } else {
-            return root -> value;
-        }
-    } 
-    else{                                                                               
-        unsigned short int mask = 1 << bit; 
-        bool bitValue = (code & mask) != 0;
-        if (bitValue) {
-            searchT(root -> right, code, bit - 1);
-        } else {
-            searchT(root -> left, code, bit - 1);
-        }
-    }
+void huffman::fillArrays(vector< short int> &c, vector< short int> &f, vector<tuple<int, unsigned short int>> codes){
+    unsigned short int l, l_2, index, n;
+    l = getLength(get<1>(codes.back()));
+    c.resize(l + 1, -1);
+    f.resize(l + 1, -1);
+    l = 0;
+    for(int i = 0; i < codes.size(); i++){
+        extractCodeAndLength(get<1>(codes[i]), l_2, n);
+        if(l_2 > l){
+            l = l_2;
+            c[l] = n;
+            f[l] = i;
+        };
+}}
+
+int huffman::decodeHuffman(unsigned short int code, vector<tuple<int, unsigned short int>> codes, vector<short int> c, vector<short int> f){
+    unsigned short int l, n;
+    extractCodeAndLength(code, l, n);
+    cout << "index: "<< f[l] + n - c[l] << "\n";
+    return get<0>(codes[f[l] + n - c[l]]);
 }

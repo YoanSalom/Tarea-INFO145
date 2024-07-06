@@ -64,6 +64,13 @@ int main(){
     {
         codesArr[i] = get<1>(huff.huffmanCodes[i]);
     }
+
+
+    for (int i = 0; i < (huff.huffmanCodes).size(); i++)
+    {
+        cout << huff.decodeHuffman(codesArr[i], huff.huffmanCodes, huff.c, huff.f) << "\n";
+    }
+
     huff.~huffman();
     delete[] arregloSample;
     delete[] arregloGap;
