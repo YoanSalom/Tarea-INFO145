@@ -175,11 +175,34 @@ void imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, 
 }
 
 int main(){
-    srand(time(NULL));
-
-    // Se definieron variables más grandes (hay que cambiarlas para ingresarlas como usuario)
+    
+    // Se definieron variables más grandes
     int media = 5000, ds = 1000;
-    int n = 1000000, e = 5, m = 100, b = n/m;//También modifiqué el b, que se supone que debe ser n/m.
+    int n = 1000000, e = 5, m = 100, b = n/m, seed;//También modifiqué el b, que se supone que debe ser n/m.
+
+    //Este bloque pide el ingreso de los valores que se usaran para funcionamiento de los algoritmos
+    cout << "Ingrese la cantidad de elementos (ej: 1000000): ";
+    cin >> n;
+
+    cout << "\nIngrese la Seed para generar los elementos: ";
+    cin >> seed;
+    srand(seed);
+
+    cout << "\nIngrese Epsilon para generar los elementos del arreglo lineal: ";
+    cin >> e;
+
+    do{
+        cout << "\nIngrese Valor para gap (n tiene que ser divisible por el gap): ";
+        cin >> m;
+    }while ( n%m != 0 && m >= n);
+
+    b = n/m;
+
+    cout << "\nIngrese la Media para generar los elementos del arreglo normal(ej: 5000): ";
+    cin >> media;
+
+    cout << "\nIngrese la Desviacion estandar para generar los elementos del arreglo normal(ej: 1000): ";
+    cin >> ds;
 
     //Creación de los arreglos lineal y normal, implementando la búsqueda binaria y el sample y gap coded.
     //Solo falta el Binary Search de los arreglos con los gap y sample.
