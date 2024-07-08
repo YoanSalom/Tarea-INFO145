@@ -9,7 +9,7 @@
 using namespace std;
 
 //Cambié la función para trabajar con punteros
-int binarySearch(int* A, int l, int r, int num){
+/*int binarySearch(int* A, int l, int r, int m, int num){
     int m;
     while (l <= r){
         m = l + (r - l) / 2;
@@ -26,6 +26,13 @@ int binarySearch(int* A, int l, int r, int num){
     }
 
     return -1;
+}*/
+
+int binarySearch(int* A, int l, int r, int m ,int num){
+    if(l > r) return -1;
+    else if (A[m] == num) return m;
+    else if (A[m] < num) return binarySearch(A,m+1,r,((m+1) + r)/2, num);
+    else return binarySearch(A,l,m-1,(l+(m-1))/2, num);
 }
 
 int* generarArregloGap(int n, int* A){
@@ -93,7 +100,7 @@ int* arregloNormalGen(int n, int media, int ds){
 //más ordenado y no hayan tantas cosas en el main
 void imprimeTiempoBusqueda(int *A, int l, int r, int elem, string type){
     double t0L = clock();
-    int posL= binarySearch(A, l, r, elem);
+    int posL= binarySearch(A, l, r, l + (r - l) / 2, elem);
     double t1L = clock();
     double tL = (t1L-t0L)/CLOCKS_PER_SEC;
 
@@ -111,7 +118,7 @@ void imprimeTiempoBusqueda(int *A, int l, int r, int elem, string type){
 //Se implementa el binary search para el sample con el gap
 int binarySearchGapWithSample(int* gap, int* sample, int n, int m, int elem, int b) {
     //Primero, verificamos que esté en el sample
-    int sample_index = binarySearch(sample, 0, m - 1, elem);
+    int sample_index = binarySearch(sample, 0, m - 1, (m-1)/2 , elem);
     if (sample_index != -1) {
         return sample_index * b;
     }
