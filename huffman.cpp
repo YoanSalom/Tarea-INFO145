@@ -1,7 +1,10 @@
 #include "huffman.h"
 
-
+ 
 huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
+    if (n == 0){
+        return;
+    }
     // encontrar el máximo valor en el arreglo para determinar el tamaño del arreglo auxiliar
     int maximo = 0;
     for (int i = 0; i < n; ++i) {
@@ -16,6 +19,7 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
     for (int i = 0; i < n; ++i) {
         frecuencias[Arr[i]]++;
     }
+
     cout << "frecuencias:";
     for (int i = 0; i < tamanoAuxiliar; ++i) {
         cout << i <<" : " << frecuencias[i] << "\n";
@@ -31,7 +35,7 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
 
 
 
-    generateCode(Arr);
+    generateCode();
     unsigned short int code = 0;
     generateHuffmanCodes(root, 0, 0);
     cout << "Codigos de Huffman:"<< "\n"; 
@@ -93,7 +97,7 @@ void huffman::printHuffmanCodes(){
     cout << "\n";
 }
 
-void huffman::generateCode(int* Arr) {
+void huffman::generateCode() {
     int l = Prob.size();
     
     // Crear el minHeap asociado a las hojas en función de las probabilidades
@@ -107,6 +111,12 @@ void huffman::generateCode(int* Arr) {
     }
     cout << endl;
 
+    if(l == 1){
+        root = new node(-1); // Crear un nodo raíz
+        root->left = new node(get<0>(Prob[0])); // Asignar el único valor como una hoja
+        root->right = nullptr; // No hay nodo derecho
+    }
+    else{
     // Extraer los elementos del Min-Heap
     while (l >= 2) {
         // Extraer el primer mínimo
@@ -130,7 +140,7 @@ void huffman::generateCode(int* Arr) {
         }
         cout << endl;
     }
-    root = get<2>(Prob[0]);
+    root = get<2>(Prob[0]);}
 }
 
 void huffman::minHeapify(vector<tuple<int, double, node*>>& heap, int l, int i) {

@@ -26,7 +26,7 @@ class huffman{
     public:
         huffman(int* Arr, int n);
         ~huffman();
-        void generateCode(int* Arr);
+        void generateCode();
 
         node* root; // Puntero a la raiz del arbol
         node* rootC; // Puntero a la raiz del arbol canonico
@@ -46,12 +46,7 @@ class huffman{
         vector<short int> c;
         vector<short int> f;
 
-        //vectores auxiliares para el outlier
-        vector<tuple<int, unsigned short int>> huffmanCodesOut;
-        vector<short int> cOut;
-        vector<short int> fOut;
         vector<tuple<int, double, node*>> Prob; //vector que contendra las probabilidades de cada elemento valido
-        vector<tuple<int, double, node*>> ProbOut; //vector que contendra las probabilidades de cada elemento Outlier
 
     private:
         //las funciones minheap y extractMinheap son funciones basicas para tratar los heaps

@@ -11,6 +11,9 @@
         "utility": "cpp",
         "ostream": "cpp",
         "bitset": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "optional": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp"
     }
 }
