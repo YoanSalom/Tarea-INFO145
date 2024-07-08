@@ -5,6 +5,7 @@
 using namespace std;
 
 
+//Crea el arreglo con los gap
 int* generarArregloGap(int n, int* A){
     int* Gap = new int[n];
     Gap[0] = A[0];
@@ -14,6 +15,7 @@ int* generarArregloGap(int n, int* A){
     return Gap;
 }
 
+//Crea el arreglo de los samples
 int* generarArregloSample(int n, int* A, int m, int b){
     int* Sample = new int[m];
     int index = 0;
@@ -25,6 +27,8 @@ int* generarArregloSample(int n, int* A, int m, int b){
     return Sample;
 }
 
+
+//Imprime los valores dentro del array
 void printArray(int* A, int n){
     for (int i = 0; i < n; i++) {
         cout << A[i] << " ";
@@ -32,6 +36,7 @@ void printArray(int* A, int n){
     cout << "\n";
 }
 
+//Genera los valores que estan dentro del arreglo lineal 
 int* arregloLinealGen(int n, int e){
     int* A = new int[n];
     A[0] = rand() % e;
@@ -42,7 +47,26 @@ int* arregloLinealGen(int n, int e){
 }
 
 int main(){
-    int n = 1000, e = 20, m = 25, b = 50;
+    int n, e, m, b, seed;
+
+    cout << "Ingrese la cantidad de elementos: ";
+    cin >> n;
+
+    cout << "Ingrese la Seed para generar numeros aleatorios: ";
+    cin >> seed;
+    srand(seed);
+
+    cout << "Ingrese Epsilon para generar numeros aleatorios: ";
+    cin >> e;
+
+    do{
+        cout << "Ingrese Valor para m (n tiene que ser divisible por m): ";
+        cin >> m;
+    }while ( n%m != 0 && m >= n);
+
+    b = n/m;
+
+
     int* arregloLineal = arregloLinealGen(n, e);
     int* arregloGap = generarArregloGap(n, arregloLineal);
     int* arregloSample = generarArregloSample(n, arregloLineal, m, b);
