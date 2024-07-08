@@ -186,6 +186,7 @@ int main(){
     // Se definieron variables más grandes
     int media = 5000, ds = 1000;
     int n = 1000000, e = 5, m = 100, b = n/m, seed;//También modifiqué el b, que se supone que debe ser n/m.
+    
 
     //Este bloque pide el ingreso de los valores que se usaran para funcionamiento de los algoritmos
     cout << "Ingrese la cantidad de elementos (ej: 1000000): ";
@@ -211,6 +212,11 @@ int main(){
     cout << "\nIngrese la Desviacion estandar para generar los elementos del arreglo normal(ej: 1000): ";
     cin >> ds;
 
+    int search = rand() % n ;
+
+    cout << "\nSe buscara el elemento en la posicion " << search << endl;
+
+    
     //Creación de los arreglos lineal y normal, implementando la búsqueda binaria y el sample y gap coded.
     //Solo falta el Binary Search de los arreglos con los gap y sample.
     int* arregloLineal = arregloLinealGen(n, e);
@@ -221,8 +227,8 @@ int main(){
     int* arregloGapNormal = generarArregloGap(n, arregloNormal);
     int* arregloSampleNormal = generarArregloSample(n, arregloNormal, m, b);
 
-    int buscar_lineal = arregloLineal[300000];
-    int buscar_normal = arregloNormal[300000];
+    int buscar_lineal = arregloLineal[search];
+    int buscar_normal = arregloNormal[search];
 
     cout <<endl<< "Arreglo Lineal: ";
     printArray(arregloLineal, n);
