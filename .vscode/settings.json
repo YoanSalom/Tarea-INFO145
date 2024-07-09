@@ -1,5 +1,23 @@
 {
     "files.associations": {
+<<<<<<< HEAD
         "iomanip": "cpp"
+=======
+        "tuple": "cpp",
+        "iostream": "cpp",
+        "new": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "memory": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "utility": "cpp",
+        "ostream": "cpp",
+        "bitset": "cpp",
+        "algorithm": "cpp",
+        "optional": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp"
+>>>>>>> gabo_debugg
     }
 }
