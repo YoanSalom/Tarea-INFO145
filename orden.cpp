@@ -56,15 +56,18 @@ int main(){
 
     cout <<endl<< "Arreglo Lineal: ";
     printArray(arregloLineal, n);
+    cout << "Tamaño: " << n*sizeof(arregloLineal[0]) << endl;
 
     //BINARY SEARCH PARA ARREGLO LINEAL
     imprimeTiempoBusqueda(arregloLineal, 0, n-1, buscar_lineal, "Arreglo Lineal");
 
     cout << "Arreglo Lineal Gap-Coded: ";
     printArray(arregloGapLineal, n);
+    cout << "Tamaño: " << n*sizeof(arregloGapLineal[0]) << endl;
     
     cout << "Arreglo Lineal Sample: ";
     printArray(arregloSampleLineal, m);
+    cout << "Tamaño: " << n*sizeof(arregloSampleLineal[0]) << endl;
 
     imprimeTiempoBusquedaSample(arregloGapLineal,arregloSampleLineal, n, m, buscar_lineal, b, "Arreglo Lineal");
 
@@ -72,15 +75,19 @@ int main(){
 
     cout << "Arreglo Normal: ";
     printArray(arregloNormal, n);
+    cout << "Tamaño: " << n*sizeof(arregloNormal[0]) << endl;
 
     //BINARY SEARCH PARA ARREGLO NORMAL
     imprimeTiempoBusqueda(arregloNormal, 0, n-1, buscar_normal, "Arreglo Normal");
 
     cout << "Arreglo Normal Gap-Coded: ";
     printArray(arregloGapNormal, n);
+    cout << "Tamaño: " << n*sizeof(arregloGapLineal[0]) << endl;
     
     cout << "Arreglo Normal Sample: ";
     printArray(arregloSampleNormal, m);
+    cout << "Tamaño: " << n*sizeof(arregloSampleLineal[0]) << endl;
+
 
     imprimeTiempoBusquedaSample(arregloGapNormal,arregloSampleNormal, n, m, buscar_normal, b, "Arreglo Normal");
 
@@ -96,6 +103,8 @@ int main(){
     unsigned short int* arrCodes = new unsigned short int[n]; 
     huffman huff(nOutA, nOut.size());
     asignarCodigos(arregloGapLineal, n, huff.huffmanCodes, arrCodes);
+
+    imprimeTiempoBusquedaHuffman(arregloSampleLineal, arregloGapLineal,n,m,buscar_lineal,b, huff,arrCodes);
 
     delete[] arregloSampleLineal;
     delete[] arregloSampleNormal;

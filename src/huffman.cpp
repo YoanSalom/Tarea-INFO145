@@ -125,10 +125,9 @@ void huffman::generateCode() {
         // Extraer el segundo mínimo
         auto min2 = Prob[0];
         extractMinHeap(Prob, l);
-        cout << "Min-Heap al extraer los dos primeros elementos: ";
         // Añadir un nodo utilizando los dos elementos extraídos
         anadirNodo(min1, min2, l);
-        cout << endl;
+
     }
     root = get<2>(Prob[0]);}
 }

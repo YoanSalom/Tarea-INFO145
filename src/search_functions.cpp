@@ -122,6 +122,27 @@ int binarySearchHuffmanGapSample(unsigned short int* codes, int* sample, int n, 
     return -1; // No se encontró el elemento
 }
 
+void imprimeTiempoBusquedaHuffman(int* sample, int* gap, int n, int m, int elem, int b, huffman h, unsigned short int* codes){
+    double t0H = clock();
+    int posH = binarySearchHuffmanGapSample(codes, sample, n, m, elem, b, h, gap);
+    double t1H = clock();
+    double tH = (t1H - t0H)/CLOCKS_PER_SEC;
+
+    cout << endl;
+
+    if (posH = -1){
+        cout <<"El elemento: "<< elem << " no se encuentra con codificacion de huffman" << endl;
+    }
+    else{
+        cout <<"El elemento: "<< elem << "se encuentra con codificacion de huffman, en la posicion: " << posH << endl;
+    }
+
+    cout << fixed << setprecision(6) << "Se demoro " << tH << "segundos en la busqueda" << endl << endl;
+
+
+
+}
+
 
 //Esta función imprime el tiempo de búsqueda, llamando a la funcion que busca, es pura estética, para que esté
 //más ordenado y no hayan tantas cosas en el main
@@ -142,3 +163,4 @@ void imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, 
     cout << fixed << setprecision(6) << "Se demoró " << tL << " segundos en hacer la búsqueda" << endl<<endl;
 
 }
+

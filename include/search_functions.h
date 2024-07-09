@@ -21,6 +21,8 @@ int binarySearchGapWithSample(int* gap, int* sample, int n, int m, int elem, int
 
 int binarySearchHuffmanGapSample(unsigned short int* codes, int* sample, int n, int m, int elem, int b, huffman h, int* gap);
 
+void imprimeTiempoBusquedaHuffman(int* sample, int* gap, int n, int m, int elem, int b, huffman h, unsigned short int* codes);
+
 void imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, int b, string type);
 
 
