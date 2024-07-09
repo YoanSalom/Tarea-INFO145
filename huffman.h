@@ -1,25 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-<<<<<<< HEAD
-
-=======
 #include <bitset>
 #include <cmath>
->>>>>>> gabo_debugg
 using namespace std;
 
 struct node
 {
     short int value;
-<<<<<<< HEAD
-    double p;
-    node* left;
-    node* right;
-
-    node(short int val, double prob, node* l = nullptr, node* r = nullptr)
-        : value(val), p(prob), left(l), right(r) {}
-=======
     node* left;
     node* right;
 
@@ -32,30 +20,12 @@ public:
     const char* what() const noexcept override {
         return "La longitud del código supera los 12 bits";
     }
->>>>>>> gabo_debugg
 };
 
 class huffman{
     public:
         huffman(int* Arr, int n);
         ~huffman();
-<<<<<<< HEAD
-        void huffmanDecode();
-        void generateCode(int* Arr);
-        node* root; // Puntero al nodo raíz
-        void print(node* n);
-        void printHuffmanCodes();
-        void generateHuffmanCodes(node* root, const string& code);
-
-    private:
-        vector<tuple<int, double, node*>> Prob;
-         vector<pair<int, string>> huffmanCodes;
-        void minHeapify(vector<tuple<int, double, node*>>& heap, int l, int i);
-        void extractMinHeap(vector<tuple<int, double, node*>>& heap, int& l);
-        void anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> v, int& len);
-        void liberarNodos(node* n);
-    };
-=======
         void generateCode();
 
         node* root; // Puntero a la raiz del arbol
@@ -92,7 +62,4 @@ class huffman{
         //los codigos usando insertion sort
         void generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& huffmanCodes); //funcion que inicia la creacion del arbol canonico
         void fillArrays(vector<short int> &c, vector<short int> &f, vector<tuple<int, unsigned short int>> codes);//rellena los arrays f y c para la decodificacion
-        void findOutliers(const vector<int>& frecuencias, vector<pair<int, int>>& outliers, vector<pair<int, int>>& nonOutliers, int & t_out, int & t_nOut);
         };
->>>>>>> gabo_debugg
-
