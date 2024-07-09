@@ -8,26 +8,7 @@
 
 using namespace std;
 
-//Cambié la función para trabajar con punteros
-/*int binarySearch(int* A, int l, int r, int m, int num){
-    int m;
-    while (l <= r){
-        m = l + (r - l) / 2;
-
-        if(A[m] == num){
-            return m;
-        }
-        if(A[m] < num){
-            l = m + 1;
-        }
-        else{
-            r = m - 1;
-        }
-    }
-
-    return -1;
-}*/
-
+//Busqueda binaria recursiva
 int binarySearch(int* A, int l, int r, int m ,int num){
     if(l > r) return -1;
     else if (A[m] == num) return m;
@@ -35,6 +16,7 @@ int binarySearch(int* A, int l, int r, int m ,int num){
     else return binarySearch(A,l,m-1,(l+(m-1))/2, num);
 }
 
+//Crea el arreglo con los gaps
 int* generarArregloGap(int n, int* A){
     int* Gap = new int[n];
     Gap[0] = A[0];
@@ -44,6 +26,7 @@ int* generarArregloGap(int n, int* A){
     return Gap;
 }
 
+//Crea los valores del arreglo sample
 int* generarArregloSample(int n, int* A, int m, int b){
     int* Sample = new int[m];
     int index = 0;
@@ -72,6 +55,8 @@ void printArray(int* A, int n, int limit = 10){
     cout << "\n";
 }
 
+
+//Genera los valores del arreglo lineal
 int* arregloLinealGen(int n, int e){
     int* A = new int[n];
     A[0] = rand() % e;
@@ -183,9 +168,9 @@ void imprimeTiempoBusquedaSample(int* gap, int* sample, int n, int m, int elem, 
 
 int main(){
     
-    // Se definieron variables más grandes
-    int media = 5000, ds = 1000;
-    int n = 1000000, e = 5, m = 100, b = n/m, seed;//También modifiqué el b, que se supone que debe ser n/m.
+    // Se definen las variables
+    int media , ds; // media = media aritmetica, ds = desviacion estandar
+    int n , e , m , b, seed; // n = numero de elementos en los array, e = Epsilon para generar los elementos del array lineal, m = es el valor de gap, seed = para calcular los numeros aleatorios
     
 
     //Este bloque pide el ingreso de los valores que se usaran para funcionamiento de los algoritmos
@@ -202,7 +187,7 @@ int main(){
     do{
         cout << "\nIngrese Valor para gap (n tiene que ser divisible por el gap): ";
         cin >> m;
-    }while ( n%m != 0 && m >= n);
+    }while ( n%m != 0 || m >= n);
 
     b = n/m;
 
@@ -211,10 +196,6 @@ int main(){
 
     cout << "\nIngrese la Desviacion estandar para generar los elementos del arreglo normal(ej: 1000): ";
     cin >> ds;
-
-    int search = rand() % n ;
-
-    cout << "\nSe buscara el elemento en la posicion " << search << endl;
 
     
     //Creación de los arreglos lineal y normal, implementando la búsqueda binaria y el sample y gap coded.
@@ -227,8 +208,11 @@ int main(){
     int* arregloGapNormal = generarArregloGap(n, arregloNormal);
     int* arregloSampleNormal = generarArregloSample(n, arregloNormal, m, b);
 
-    int buscar_lineal = arregloLineal[search];
-    int buscar_normal = arregloNormal[search];
+    int buscar_lineal = rand() % arregloLineal[n-1];
+    cout << "Se buscara el valor " << buscar_lineal << " en el arreglo lineal" << endl;
+
+    int buscar_normal = rand() % arregloNormal[n-1];
+    cout << "Se buscara el valor " << buscar_normal << " en el arreglo normal" << endl;
 
     cout <<endl<< "Arreglo Lineal: ";
     printArray(arregloLineal, n);
