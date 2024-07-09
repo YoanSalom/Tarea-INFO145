@@ -1,3 +1,6 @@
+#ifndef HUFFMAN_H
+#define HUFFMAN_H
+
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -63,3 +66,5 @@ class huffman{
         void generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& huffmanCodes); //funcion que inicia la creacion del arbol canonico
         void fillArrays(vector<short int> &c, vector<short int> &f, vector<tuple<int, unsigned short int>> codes);//rellena los arrays f y c para la decodificacion
         };
+
+#endif // HUFFMAN_H

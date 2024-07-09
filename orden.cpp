@@ -86,24 +86,24 @@ int main(){
 
     cout<<endl;
 
+    //como se crea el arreglo para los codigos canonicos para gapLineal
+    //se crea el vector con sin outliers
     vector<int> out, nOut;
     filtrarArray(arregloGapLineal, nOut, out, n);
+    // generamos un array con los elementos que no son outliers
     int* nOutA = &nOut[0];
+    //generamos el arreglo con los codigos
     unsigned short int* arrCodes = new unsigned short int[n]; 
     huffman huff(nOutA, nOut.size());
-    huffman huff(arregloGapLineal, n);
+    asignarCodigos(arregloGapLineal, n, huff.huffmanCodes, arrCodes);
 
-
-    huffman huffN(arregloGapNormal, n);
-
-
-    huff.~huffman();
     delete[] arregloSampleLineal;
     delete[] arregloSampleNormal;
     delete[] arregloGapLineal;
     delete[] arregloGapNormal;
     delete[] arregloLineal;
     delete[] arregloNormal;
+    delete[] arrCodes;
 
     return 0;
 }

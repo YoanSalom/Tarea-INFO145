@@ -94,7 +94,7 @@ int* generarArregloSample(int n, int* A, int m, int b){
 
 //Limité la funcion de impresién del arreglo, para que se impriman solo los primeros y ultimos valores, y asi sea mas legible con
 //los arreglos muy grandes.
-void printArray(int* A, int n, int limit = 10){
+void printArray(int* A, int n, int limit){
     for (int i = 0; i < min(n, limit); i++) {
         cout << A[i] << " ";
     }
