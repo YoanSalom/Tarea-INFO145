@@ -136,6 +136,7 @@ int main(){
     int* arregloLineal = arregloLinealGen(n, e);
     int* arregloGap = generarArregloGap(n, arregloLineal);
     int* arregloSample = generarArregloSample(n, arregloLineal, m, b);
+    
     vector<int> out, nOut;
     
     cout << "Arreglo Lineal: ";
@@ -168,4 +169,5 @@ int main(){
     delete[] arregloGap;
     delete[] arregloLineal;
     return 0;
+
 }

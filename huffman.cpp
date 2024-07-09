@@ -33,21 +33,26 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
         }
     }
 
-
-
+    //se llama a la funcion generate code para iniciar la construccion del arbol de huffman
     generateCode();
-    unsigned short int code = 0;
+    //genera los codigos recorriendo el arbol en preorder
     generateHuffmanCodes(root, 0, 0);
     cout << "Codigos de Huffman:"<< "\n"; 
     printHuffmanCodes();
+    //ordena los codigos dependiendo del largo de estos
     insertionSort(huffmanCodes);
     cout << "Codigos de Huffman despues de ordenarse:"<< "\n";
     printHuffmanCodes();
+    //llama a la funcion para crear el arbol canonico
     generateCanonicalHuffman(huffmanCodes);
+    //se limpia el vector de los codigos de huffman para volver a llemarlos con los canonicos
     huffmanCodes.clear();
     cout << "Codigos de Huffman:"<< "\n";
+    //se llama la funcion que genera los codigos pero con la raiz del arbol canonico de huffman
     generateHuffmanCodes(rootC, 0, 0);
+    //se vuelven a ordernar dependiendo del largo
     insertionSort(huffmanCodes);
+    //llena los vectores necesarios para llevar a cabo la decodificacion.
     fillArrays(c, f, huffmanCodes);
 }
 
@@ -282,10 +287,16 @@ void huffman::arbolCan(int v, unsigned short int l, int bit, node* rootT, unsign
 void huffman::generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& huffmanCodes){
     //funcion para crear los codigos canonicos e insertarlos en el arbol.
     unsigned short int l, l_c, code_c;
-    l = getLength(get<1>(huffmanCodes[0]));
+    //se crean los nodos para representar el primer codigo de huffman canonico
+    l = getLength(get<1>(huffmanCodes[0])); 
     rootC = new node(-1);
     code_c = 0;
     arbolCan(get<0>(huffmanCodes[0]), l, l-1, rootC, code_c);
+    /*se crea el arbol canonico a partir del primer codigo creado (una secuencia l de 0), 
+    si el segundo codigo de huffman es del mismo largo que el del codigo anterior, el siguiente codigo canonico
+    sera el anterior + 1, si es de largo l + 1, el codigo sera 2*(codigo canonico anterior + 1), si faltan
+    valores intermedios se crearan los nodos intermedios necesarios, el codigo canonico sera el anterior con un bit
+    corrido a la izquierda*/
     for(int i = 1; i < huffmanCodes.size(); i++){
         l_c = getLength(get<1>(huffmanCodes[i]));
         if(l == l_c){
@@ -324,9 +335,11 @@ void huffman::generateCanonicalHuffman(vector<tuple<int, unsigned short int>>& h
 void huffman::fillArrays(vector< short int> &c, vector< short int> &f, vector<tuple<int, unsigned short int>> codes){
     unsigned short int l, l_2, index, n;
     l = getLength(get<1>(codes.back()));
+    //inicializa los vectores c y f con tamaño l+1
     c.resize(l + 1, -1);
     f.resize(l + 1, -1);
     l = 0;
+    //rellena el vector f con los indices de los primeros codigos de largo l y c con los codigos correspondientes
     for(int i = 0; i < codes.size(); i++){
         extractCodeAndLength(get<1>(codes[i]), l_2, n);
         if(l_2 > l){
@@ -337,8 +350,8 @@ void huffman::fillArrays(vector< short int> &c, vector< short int> &f, vector<tu
 }}
 
 int huffman::decodeHuffman(unsigned short int code, vector<tuple<int, unsigned short int>> codes, vector<short int> c, vector<short int> f){
+    //ya que la secuencia a decodificar es el codigo en si, solo seran realizar loas pasos 3, 4 y 5 del algoritmo de decodificacion
     unsigned short int l, n;
     extractCodeAndLength(code, l, n);
-    cout << "index: "<< f[l] + n - c[l] << "\n";
     return get<0>(codes[f[l] + n - c[l]]);
 }
