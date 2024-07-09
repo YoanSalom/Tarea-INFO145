@@ -20,11 +20,6 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
         frecuencias[Arr[i]]++;
     }
 
-    cout << "frecuencias:";
-    for (int i = 0; i < tamanoAuxiliar; ++i) {
-        cout << i <<" : " << frecuencias[i] << "\n";
-    }
-
     // crear un vector de tuplas a partir del arreglo de frecuencias
     for (int num = 0; num < tamanoAuxiliar; ++num) {
         if (frecuencias[num] > 0) {
@@ -37,17 +32,13 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
     generateCode();
     //genera los codigos recorriendo el arbol en preorder
     generateHuffmanCodes(root, 0, 0);
-    cout << "Codigos de Huffman:"<< "\n"; 
-    printHuffmanCodes();
+
     //ordena los codigos dependiendo del largo de estos
     insertionSort(huffmanCodes);
-    cout << "Codigos de Huffman despues de ordenarse:"<< "\n";
-    printHuffmanCodes();
     //llama a la funcion para crear el arbol canonico
     generateCanonicalHuffman(huffmanCodes);
     //se limpia el vector de los codigos de huffman para volver a llemarlos con los canonicos
     huffmanCodes.clear();
-    cout << "Codigos de Huffman:"<< "\n";
     //se llama la funcion que genera los codigos pero con la raiz del arbol canonico de huffman
     generateHuffmanCodes(rootC, 0, 0);
     //se vuelven a ordernar dependiendo del largo
@@ -58,7 +49,11 @@ huffman::huffman(int* Arr, int n) : root(nullptr), huffmanCodes(){
 
 
 huffman::~huffman() {
-    // Liberar la memoria del árbol de Huffman
+    // Liberar la memoria del árbol de Huffman y limpiar los vectores auxiliares
+    c.clear();
+    f.clear();
+    Prob.clear();
+    huffmanCodes.clear();
     liberarNodos(root);
     liberarNodos(rootC);
 }
@@ -79,7 +74,6 @@ void huffman::generateHuffmanCodes(node* root, unsigned short int code,unsigned 
                 // Almacenar la longitud en los 4 bits más significativos
                 unsigned short int storedCode = (length << 12) | code;
                 huffmanCodes.push_back({root->value, storedCode});
-                cout << "Almacenando valor: " << root->value << ", codigo: " << bitset<16>(storedCode) << "\n";
             } else {
                 cerr << "Error: la longitud del código supera los 12 bits para el valor " << root->value << "\n";
                 throw HuffmanCodeLengthException(); // Lanzar excepción
@@ -133,16 +127,7 @@ void huffman::generateCode() {
         extractMinHeap(Prob, l);
         cout << "Min-Heap al extraer los dos primeros elementos: ";
         // Añadir un nodo utilizando los dos elementos extraídos
-        for (const auto& elem : Prob) {
-            cout << get<0>(elem) << "(" << get<1>(elem) << ")";
-        }
-        cout << endl << l<< endl;
-
         anadirNodo(min1, min2, l);
-        cout << "Min-Heap nuevo: ";
-        for (const auto& elem : Prob) {
-            cout << get<0>(elem) << "(" << get<1>(elem) << ") ";
-        }
         cout << endl;
     }
     root = get<2>(Prob[0]);}
@@ -208,7 +193,6 @@ void huffman::anadirNodo(tuple<int, double, node*> u, tuple<int, double, node*> 
     swap(Prob[len-1], Prob[Prob.size()-1]);
     // Actualizar la raíz del árbol de Huffman
     root = parentNode;
-    cout <<  "valor:" <<root -> value << "\n";
     // Reordenar el minHeap
     for (int i = len / 2 - 1; i >= 0; i--) {
         minHeapify(Prob, len, i);
