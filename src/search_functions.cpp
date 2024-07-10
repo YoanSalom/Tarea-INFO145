@@ -137,7 +137,7 @@ void imprimeTiempoBusquedaHuffman(int* sample, int* gap, int n, int m, int elem,
         cout <<"El elemento: "<< elem << "se encuentra con codificacion de huffman, en la posicion: " << posH << endl;
     }
 
-    cout << fixed << setprecision(6) << "Se demoro " << tH << "segundos en la busqueda" << endl << endl;
+    cout << fixed << setprecision(6) << "Se demoro " << tH << " segundos en la busqueda" << endl << endl;
 
 
 

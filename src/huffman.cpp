@@ -104,12 +104,12 @@ void huffman::generateCode() {
         minHeapify(Prob, l, i);
     }
     // Imprimir el heap para verificar
-    cout << "Min-Heap creado: ";
+  /*  cout << "Min-Heap creado: ";
     for (const auto& elem : Prob) {
         cout << get<0>(elem) << "(" << get<1>(elem) << ") ";
     }
     cout << endl;
-
+*/
     if(l == 1){
         root = new node(-1); // Crear un nodo raíz
         root->left = new node(get<0>(Prob[0])); // Asignar el único valor como una hoja
